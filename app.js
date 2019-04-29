@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
+
 const bodyParser = require('body-parser');
+const urlencodedParser = bodyParser.urlencoded({extended: false});
+
+
 const mysql = require('mysql');
-
-const fs = require("fs");
-
 const env = require("./env");
+
+const pug = require('pug');
+
  
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -21,15 +25,36 @@ const client = mysql.createConnection({
 });
  
 // connect to database
-client.connect();
+// client.connect();
  
 // default route
 app.get('/', function (req, res) {
-    console.log(process.env);
     return res.send({ 
         error: true, 
         message: 'hello world' 
     })
+});
+
+app.get('/pug', function (req, res) {
+    const index = './views/index.pug'
+    const compiledFunction = pug.compileFile(index);
+    return res.write(compiledFunction());
+});
+
+app.post("/add", urlencodedParser, function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    // console.log(req.body.msg);
+    let msg = req.body.msg;
+
+    client.query("INSERT INTO tasks SET ? ", { name: msg }, function (error, results, fields) {
+        if (error) throw error;
+        return res.send(`${req.body.msg}`);
+    });
+
+
+
+
+    // res.send(`${req.body.msg}`);
 });
 
 app.get('/data', function (req, res) {
