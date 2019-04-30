@@ -31,13 +31,6 @@ function reconnect_db(){
 }
 var db = reconnect_db();
 
-let i = 1;
-function func() {
-    console.log(i);
-    i += 1;
-}
-setInterval(func, 1000);
-
 app.get('/', function (req, res) {
     return res.render('index');
 });
@@ -47,6 +40,25 @@ app.post("/add", urlencodedParser, function (req, res) {
     let msg = req.body.msg;
 
     db.query("INSERT INTO tasks SET ? ", { name: msg }, function (err, results, fields) {
+        if (err) throw err;
+        return res.redirect('/data');
+    });
+});
+
+app.get('/delete/:id', function(req, res, next) {
+    let id = req.params.id;
+
+    db.query("DELETE FROM tasks WHERE ? ", { id: id }, function (err, results, fields) {
+        if (err) throw err;
+        return res.redirect('/data');
+    });
+});
+
+app.get('/edit/:id', function(req, res, next) {
+    let id = req.params.id;
+    let msg = req.body.msg;
+
+    db.query("UPDATE tasks SET name = ? WHERE id = ?", {id: id, name: msg}, function (error, results, fields) {
         if (err) throw err;
         return res.redirect('/data');
     });

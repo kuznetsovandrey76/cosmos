@@ -4,7 +4,11 @@ ul
   each i in results
     span= i.id
     span : 
-    span= i.name
+    span= i.name 
+    span  --- 
+    a(href='edit/' + i.id) edit
+    span   -  
+    a(href='delete/' + i.id) X
     br
 
 a(href='/') home
