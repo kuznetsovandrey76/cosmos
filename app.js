@@ -56,11 +56,11 @@ app.get('/delete/:id', function(req, res, next) {
     });
 });
 
-app.get('/edit/:id', function(req, res, next) {
+app.post('/edit/:id', function(req, res, next) {
     let id = req.params.id;
     let msg = req.body.msg;
 
-    db.query("UPDATE tasks SET name = ? WHERE id = ?", {id: id, name: msg}, function (error, results, fields) {
+    db.query("UPDATE tasks SET name = ? WHERE id = ?", [msg, id], function (err, results, fields) {
         if (err) throw err;
         return res.redirect('/data');
     });

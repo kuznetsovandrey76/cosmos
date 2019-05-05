@@ -18,10 +18,16 @@ ul
 
 a(href='/') home
 
-.b-container
+//- .b-container
   | Sample Text
   a(href='javascript:PopUpShow()') Show popup
 #popup1.b-popup
   .b-popup-content
-    | Text in Popup
-    a(href='javascript:PopUpHide()') Hide popup
+    form.popup-form(action='#', method='post')
+      | Message:
+      br
+      input.popup(type='text' name='msg' value='')
+      input(type='submit' value='Submit')
+    //- a.popup-form(href='#') go
+    //- | Text in Popup
+    //- a(href='javascript:PopUpHide()') Hide popup
