@@ -8,3 +8,4 @@ const env = {
 }
 module.exports.data = env;
 ```
+2. `node app`  

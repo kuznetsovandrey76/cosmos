@@ -1,14 +1,27 @@
+script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js")
+script(src="/src/main.js")
+link(rel='stylesheet', href='/src/style.css')
+
 h1 data
 
 ul
   each i in results
-    span= i.id
-    span : 
-    span= i.name 
-    span  --- 
-    a(href='edit/' + i.id) edit
-    span   -  
-    a(href='delete/' + i.id) X
-    br
+    div.block
+      span.id= i.id
+      span : 
+      span.name= i.name 
+      span  --- 
+      a.edit(href='javascript:PopUpShow()') edit
+      span   -  
+      a(href='delete/' + i.id) X
+      br
 
 a(href='/') home
+
+.b-container
+  | Sample Text
+  a(href='javascript:PopUpShow()') Show popup
+#popup1.b-popup
+  .b-popup-content
+    | Text in Popup
+    a(href='javascript:PopUpHide()') Hide popup

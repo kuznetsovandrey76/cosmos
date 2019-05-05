@@ -9,7 +9,9 @@ const pug = require('pug');
 app.set('views', './views');
 app.set('view engine', 'pug');
 app.engine('pug', pug.__express);
- 
+
+app.use('/src', express.static(__dirname + '/src'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
