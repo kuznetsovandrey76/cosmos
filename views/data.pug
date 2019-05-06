@@ -1,4 +1,5 @@
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js")
+script(src="/src/socket.io.js")
 script(src="/src/main.js")
 link(rel='stylesheet', href='/src/style.css')
 
@@ -31,3 +32,9 @@ a(href='/') home
     //- a.popup-form(href='#') go
     //- | Text in Popup
     //- a(href='javascript:PopUpHide()') Hide popup
+
+
+form#send
+  input(type="text", id="message")
+  button(type="submit") Отnравить
+div#subscribe

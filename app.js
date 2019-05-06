@@ -1,14 +1,65 @@
 const express = require('express');
 const app = express();
+
+const http = require('http');
+const server = http.createServer(app);
+
+const io = require('socket.io').listen(server);
+
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 const mysql = require('mysql');
 const env = require("./env");
 const pug = require('pug');
 
+
+// WebSocket
+// const WS = require('ws');
+// const wss = new WS.Server({port: 80});
+// const clients = [];
+
+// wss.on('connection', ws => {
+//     const id = clients.length;
+//     clients[id] = ws;
+    
+//     clients[id].send(
+//         JSON.stringify({
+//             type: 'hello',
+//             message: `Hello your id is ${id}`,
+//             data: id
+//     }));
+//     clients.forEach(el => {
+//         el.send(
+//             JSON.stringify({
+//                 type: 'info',
+//                 message: `New connection id = ${id}`,
+//             })
+//         );
+//     });
+
+//     ws.on('message', message => {
+//         clients.forEach(el => {
+//             el.send(
+//                 JSON.stringify({
+//                     type: 'message',
+//                     message: message,
+//                     author: id
+//                 })
+//             );
+//         }); 
+//     });
+
+//     ws.on('error', err => {
+//         console.log(err.message)
+//     })
+// });
+
+
+
+
+app.engine('pug', pug.__express);
 app.set('views', './views');
 app.set('view engine', 'pug');
-app.engine('pug', pug.__express);
 
 app.use('/src', express.static(__dirname + '/src'));
 
@@ -80,6 +131,49 @@ app.all("*", function (req, res, next) {
 });
  
 // port must be set to 3000 because incoming http requests are routed from port 80 to port 8080
-app.listen(process.env.PORT || 3000, function () {
+// app.listen(process.env.PORT || 3000, function () {
+//     console.log('Server start. http://localhost:3000');
+// });
+
+
+server.listen(process.env.PORT || 3000, function () {
     console.log('Server start. http://localhost:3000');
+});
+
+
+const clients = {};
+let count = 0;
+
+io.on('connection', (socket) => {
+    const id = count++;
+    clients[id] = socket.id;
+    console.log(clients);
+
+    socket.send({
+        type: 'hello',
+        message: `Hello your id is ${id}`,
+        data: id
+    });
+    socket.broadcast.send({
+        type: 'info',
+        message: `New connection id = ${id}`,
+    });
+
+
+    socket.on('message', message => {
+        socket.send({
+            type: 'message',
+            message: message,
+            author: id
+        });
+        socket.broadcast.send({
+            type: 'message',
+            message: message,
+            author: id
+        });
+    });
+
+    socket.on('disconnect', () => {
+        delete clients[id];
+    });
 });
