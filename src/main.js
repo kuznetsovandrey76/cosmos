@@ -29,10 +29,11 @@ $(document).ready(function(){
                 text = message.message;
                 break;
             case 'message':
-                text = `${message.author} : ${message.message}`;
+                // text = `${message.author} : ${message.message}`;
+                text = `${message.message}`;
                 break;
             default:
-                alert(message.message);
+                // alert(message.message);
                 break;
         }
         const result = document.querySelector('#subscribe');

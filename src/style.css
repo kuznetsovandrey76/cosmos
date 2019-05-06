@@ -1,6 +1,13 @@
-body {
+body,
+ul {
     margin: 0;
+    padding: 0;
 }
+
+ul {
+    margin-bottom: 20px;
+}
+
 .b-container{
     width:200px;
     height:150px;

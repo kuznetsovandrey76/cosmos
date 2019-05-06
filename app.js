@@ -13,50 +13,6 @@ const env = require("./env");
 const pug = require('pug');
 
 
-// WebSocket
-// const WS = require('ws');
-// const wss = new WS.Server({port: 80});
-// const clients = [];
-
-// wss.on('connection', ws => {
-//     const id = clients.length;
-//     clients[id] = ws;
-    
-//     clients[id].send(
-//         JSON.stringify({
-//             type: 'hello',
-//             message: `Hello your id is ${id}`,
-//             data: id
-//     }));
-//     clients.forEach(el => {
-//         el.send(
-//             JSON.stringify({
-//                 type: 'info',
-//                 message: `New connection id = ${id}`,
-//             })
-//         );
-//     });
-
-//     ws.on('message', message => {
-//         clients.forEach(el => {
-//             el.send(
-//                 JSON.stringify({
-//                     type: 'message',
-//                     message: message,
-//                     author: id
-//                 })
-//             );
-//         }); 
-//     });
-
-//     ws.on('error', err => {
-//         console.log(err.message)
-//     })
-// });
-
-
-
-
 app.engine('pug', pug.__express);
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -149,11 +105,12 @@ io.on('connection', (socket) => {
     clients[id] = socket.id;
     console.log(clients);
 
-    socket.send({
-        type: 'hello',
-        message: `Hello your id is ${id}`,
-        data: id
-    });
+    // socket.send({
+        // type: 'test'
+        // message: `Hello your id is ${id}`,
+        // data: id
+    // });
+
     socket.broadcast.send({
         type: 'info',
         message: `New connection id = ${id}`,
@@ -164,12 +121,12 @@ io.on('connection', (socket) => {
         socket.send({
             type: 'message',
             message: message,
-            author: id
+            // author: id
         });
         socket.broadcast.send({
             type: 'message',
             message: message,
-            author: id
+            // author: id
         });
     });
 

@@ -3,7 +3,30 @@ script(src="/src/socket.io.js")
 script(src="/src/main.js")
 link(rel='stylesheet', href='/src/style.css')
 
-h1 data
+#popup1.b-popup
+  .b-popup-content
+    form.popup-form(action='#', method='post')
+      | Message:
+      br
+      input.popup(type='text' name='msg' value='')
+      input(type='submit' value='Submit')
+
+
+//- WebSocket
+//- form#send
+//-   input(type="text", id="message")
+//-   input(type='submit' value='Добавить')
+//- div#subscribe
+
+
+form(action='/add', method='post')
+  | Ваше сообщение:
+  br
+  input(type='text' name='msg' value='')
+  input(type='submit' value='Добавить')
+
+
+h4 Список сообщений
 
 ul
   each i in results
@@ -15,26 +38,23 @@ ul
       a.edit(href='javascript:PopUpShow()') edit
       span   -  
       a(href='delete/' + i.id) X
-      br
-
-a(href='/') home
-
-//- .b-container
-  | Sample Text
-  a(href='javascript:PopUpShow()') Show popup
-#popup1.b-popup
-  .b-popup-content
-    form.popup-form(action='#', method='post')
-      | Message:
-      br
-      input.popup(type='text' name='msg' value='')
-      input(type='submit' value='Submit')
-    //- a.popup-form(href='#') go
-    //- | Text in Popup
-    //- a(href='javascript:PopUpHide()') Hide popup
 
 
-form#send
-  input(type="text", id="message")
-  button(type="submit") Отnравить
-div#subscribe
+table
+  caption Список сообщений
+  tbody
+    tr
+      th № 
+      th msg
+      th ред.
+      th уд.
+    each i in results
+      tr
+        td 
+          span.id= i.id
+        td 
+          span.name= i.name
+        td 
+          a.edit(href='javascript:PopUpShow()') edit
+        td 
+          a(href='delete/' + i.id) X
