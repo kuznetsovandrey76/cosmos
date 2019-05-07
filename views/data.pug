@@ -1,60 +1,97 @@
-script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js")
-script(src="/src/socket.io.js")
-script(src="/src/main.js")
-link(rel='stylesheet', href='/src/style.css')
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css", crossorigin="anonymous")
+    link(rel='stylesheet', href='/src/style.css')
 
-#popup1.b-popup
-  .b-popup-content
-    form.popup-form(action='#', method='post')
-      | Message:
-      br
-      input.popup(type='text' name='msg' value='')
-      input(type='submit' value='Submit')
+  body 
+    //- .container
+    //-   #popup1.popup
+    //-     .popup-content
+    //-       form.popup-form(action='#', method='post')
+    //-         | Message:
+    //-         br
+    //-         input.popup-msg(type='text' name='msg')
+    //-         input(type='submit' value='Submit')
 
-
-//- WebSocket
-//- form#send
-//-   input(type="text", id="message")
-//-   input(type='submit' value='Добавить')
-//- div#subscribe
-
-
-form(action='/add', method='post')
-  | Ваше сообщение:
-  br
-  input(type='text' name='msg' value='')
-  input(type='submit' value='Добавить')
-
-
-h4 Список сообщений
-
-ul
-  each i in results
-    div.block
-      span.id= i.id
-      span : 
-      span.name= i.name 
-      span  --- 
-      a.edit(href='javascript:PopUpShow()') edit
-      span   -  
-      a(href='delete/' + i.id) X
+    .container
+      .modal(data-modal='trigger-3')
+        article.content-wrapper
+          button.close
+          header.modal-header
+            h2 Редактировать
+          form.popup-form.w-100(action='#', method='post')
+            input.popup-msg(type='text' name='msg')
+            input.action(type='submit' value='ok') 
+          //- footer.modal-footer
+          //-   button.action Accept
+          //-   button.action Decline
 
 
-table
-  caption Список сообщений
-  tbody
-    tr
-      th № 
-      th msg
-      th ред.
-      th уд.
-    each i in results
-      tr
-        td 
-          span.id= i.id
-        td 
-          span.name= i.name
-        td 
-          a.edit(href='javascript:PopUpShow()') edit
-        td 
-          a(href='delete/' + i.id) X
+    .container
+      .my-3.w-100
+        #new-post.w-100.post-input
+          #new-post-temp
+            p.m-0.p-2.pl-3 Что у Вас нового?              
+          form#new-post-add(action='/add' method='post')
+            input.w-100.post-input.p-2.pl-3(type='text' name='msg' placeholder="Что у Вас нового?")
+            div.border-block
+            input.send.m-2.ml-3.py-1.px-2(type='submit' value='Добавить')
+          
+            //- p.m-0 Что у Вас нового?
+
+
+    .container
+      table.table_price.table 
+        //- caption Сообщения
+        tbody
+          //- tr
+          //-   th № 
+          //-   th текст
+          //-   th 
+          //-   th 
+          each i in results
+            tr
+              td.id= i.id
+              td.name.col-10
+                div= i.name
+              td 
+                //- a.edit(href='javascript:PopUpShow()' data-modal-trigger="trigger-3" class="trigger") edit
+                a.edit.trigger(data-modal-trigger="trigger-3") edit
+              td
+                a.trigger(href='delete/' + i.id) X
+
+
+    script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', crossorigin='anonymous')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js")
+    script(src="/src/socket.io.js")
+    script(src="/src/main.js")
+
+
+
+    //- WebSocket
+    //- form#send
+    //-   input(type="text", id="message")
+    //-   input(type='submit' value='Добавить')
+    //- div#subscribe
+
+
+
+
+    //- h4 Список сообщений
+    //- ul
+    //-   each i in results
+    //-     div.block
+    //-       span.id= i.id
+    //-       span : 
+    //-       span.name= i.name 
+    //-       span  --- 
+    //-       a.edit(href='javascript:PopUpShow()') edit
+    //-       span   -  
+    //-       a(href='delete/' + i.id) X
+
