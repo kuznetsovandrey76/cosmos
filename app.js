@@ -13,6 +13,7 @@ const env = require("./env");
 const pug = require('pug');
 
 
+
 app.engine('pug', pug.__express);
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -24,6 +25,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
  
+
+
 function reconnect_db(){
     db = mysql.createConnection({
         host: `${env.data.HOST}`,
@@ -40,8 +43,13 @@ function reconnect_db(){
 }
 var db = reconnect_db();
 
+
+
 app.get('/', function (req, res) {
-    return res.render('index');
+    db.query('SELECT * FROM tasks', function (err, results, fields) {
+        if (err) throw err;
+        return res.render('index', {results: results});
+    });
 });
 
 app.post("/add", urlencodedParser, function (req, res) {
@@ -50,16 +58,7 @@ app.post("/add", urlencodedParser, function (req, res) {
 
     db.query("INSERT INTO tasks SET ? ", { name: msg }, function (err, results, fields) {
         if (err) throw err;
-        return res.redirect('/data');
-    });
-});
-
-app.get('/delete/:id', function(req, res, next) {
-    let id = req.params.id;
-
-    db.query("DELETE FROM tasks WHERE ? ", { id: id }, function (err, results, fields) {
-        if (err) throw err;
-        return res.redirect('/data');
+        return res.redirect('/');
     });
 });
 
@@ -69,32 +68,27 @@ app.post('/edit/:id', function(req, res, next) {
 
     db.query("UPDATE tasks SET name = ? WHERE id = ?", [msg, id], function (err, results, fields) {
         if (err) throw err;
-        return res.redirect('/data');
+        return res.redirect('/');
     });
 });
 
-app.get('/data', function (req, res) {
-    db.query('SELECT * FROM tasks', function (err, results, fields) {
+app.get('/delete/:id', function(req, res, next) {
+    let id = req.params.id;
+
+    db.query("DELETE FROM tasks WHERE ? ", { id: id }, function (err, results, fields) {
         if (err) throw err;
-        return res.render('data', {results: results});
+        return res.redirect('/');
     });
 });
 
-// all other requests redirect to 404
 app.all("*", function (req, res, next) {
     return res.send('page not found');
-    next();
 });
- 
-// port must be set to 3000 because incoming http requests are routed from port 80 to port 8080
-// app.listen(process.env.PORT || 3000, function () {
-//     console.log('Server start. http://localhost:3000');
-// });
-
 
 server.listen(process.env.PORT || 3000, function () {
     console.log('Server start. http://localhost:3000');
 });
+
 
 
 const clients = {};

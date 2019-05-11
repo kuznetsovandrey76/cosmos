@@ -9,3 +9,4 @@ const env = {
 module.exports.data = env;
 ```
 2. `node app`  
+3. `cd /C/Users/Андрей/.ssh`
